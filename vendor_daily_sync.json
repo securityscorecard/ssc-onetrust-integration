@@ -1,0 +1,515 @@
+{
+  "name": "SecurityScorecard Daily Sync",
+  "enabled": false,
+  "workflowType": "COMPOSITE",
+  "integrationName": "SecurityScorecard Daily Sync",
+  "referenceIntegrationName": "SecurityScorecard",
+  "dlqMessageCount": 0,
+  "throttlingLimit": 0,
+  "defaultDlqAction": "NONE",
+  "failedAlertFrequencyHrs": 0,
+  "formatVersion": "1.0",
+  "trigger": {
+    "name": "SecurityScorecard Daily Sync",
+    "workflowName": "SecurityScorecard Daily Sync",
+    "triggerType": "SCHEDULED",
+    "triggerContext": {
+      "ScheduledTrigger": {
+        "type": "SCHEDULED",
+        "cronExpression": "0 0 1 * * ? *",
+        "dateTime": {
+          "seconds": "0",
+          "minutes": "0",
+          "hours": {
+            "label": "0:00",
+            "value": "0",
+            "cronExp": null
+          },
+          "dayOfMonth": "1",
+          "month": "1",
+          "dayOfWeek": {
+            "label": "M",
+            "value": "2",
+            "cronExp": "MON"
+          },
+          "year": null,
+          "frequency": {
+            "label": "Daily",
+            "value": "1",
+            "cronExp": "1/1"
+          },
+          "frequencyIntervalTracker": "?"
+        },
+        "runManual": false,
+        "subFlow": false,
+        "config": false,
+        "webhook": false,
+        "isRunManual": false
+      }
+    },
+    "description": null,
+    "eventCode": "9000",
+    "schema": null
+  },
+  "actions": [
+    {
+      "processType": "TRANSFORM",
+      "processContext": {
+        "DataTransformer": {
+          "type": "TRANSFORM",
+          "template": "{}",
+          "independentNode": false,
+          "continueOnError": null,
+          "isIndependentNode": false
+        }
+      },
+      "nodeLabel": "transform_0",
+      "nodeDescription": "GET List Vendors",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": "getListOfInventoriesUsingGET",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"getListOfInventoriesUsingGET\",\n   \"fields\": [\n      {\n         \"type\": \"array\",\n         \"name\": \"data\",\n         \"items\": {\n            \"type\": \"record\",\n            \"name\": \"A8bb201e00b5240e0803da198a885f74\",\n            \"fields\": [\n               {\n                  \"type\": \"string\",\n                  \"name\": \"id\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"name\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"record\",\n                  \"name\": \"organization\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"id\",\n                        \"required\": false\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"value\",\n                        \"required\": false\n                     }\n                  ],\n                  \"required\": false\n               }\n            ]\n         },\n         \"required\": false\n      },\n      {\n         \"type\": \"record\",\n         \"name\": \"meta\",\n         \"fields\": [\n            {\n               \"type\": \"record\",\n               \"name\": \"page\",\n               \"fields\": [\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"number\",\n                     \"required\": false\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"size\",\n                     \"required\": false\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"totalElements\",\n                     \"required\": false\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"totalPages\",\n                     \"required\": false\n                  }\n               ],\n               \"required\": false\n            }\n         ],\n         \"required\": false\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "HTTP",
+      "processContext": {
+        "HttpConnector": {
+          "type": "HTTP",
+          "headers": {},
+          "requestURI": "https://app.onetrust.com/api/inventory/v2/inventories/vendors?page={string}&size={string}",
+          "httpMethod": "GET",
+          "jweEncryptionRequired": false,
+          "jweDecryptionRequired": false,
+          "encryptionCredentialId": null,
+          "decryptionCredentialId": null,
+          "internal": true,
+          "continueOnError": "NONE",
+          "pathParams": {},
+          "queryParams": {
+            "size": "null",
+            "page": "null"
+          },
+          "isInternal": true,
+          "isDSPortal": false,
+          "viewType": "ADVANCED"
+        }
+      },
+      "nodeLabel": "http_0",
+      "nodeDescription": "GET List Vendors",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": "getListOfInventoriesUsingGET",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"getListOfInventoriesUsingGET\",\n   \"fields\": [\n      {\n         \"type\": \"array\",\n         \"name\": \"data\",\n         \"items\": {\n            \"type\": \"record\",\n            \"name\": \"A8bb201e00b5240e0803da198a885f74\",\n            \"fields\": [\n               {\n                  \"type\": \"string\",\n                  \"name\": \"id\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"name\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"record\",\n                  \"name\": \"organization\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"id\",\n                        \"required\": false\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"value\",\n                        \"required\": false\n                     }\n                  ],\n                  \"required\": false\n               }\n            ]\n         },\n         \"required\": false\n      },\n      {\n         \"type\": \"record\",\n         \"name\": \"meta\",\n         \"fields\": [\n            {\n               \"type\": \"record\",\n               \"name\": \"page\",\n               \"fields\": [\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"number\",\n                     \"required\": false\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"size\",\n                     \"required\": false\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"totalElements\",\n                     \"required\": false\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"totalPages\",\n                     \"required\": false\n                  }\n               ],\n               \"required\": false\n            }\n         ],\n         \"required\": false\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "PAGINATION",
+      "processContext": {
+        "PageSizeIterator": {
+          "type": "PAGINATION",
+          "totalPages": null,
+          "totalElements": "${(step.http_0.meta.page.totalElements)!}",
+          "pageSize": "${(step.http_0.meta.page.size)!}",
+          "commonNodeLabel": "transform_6",
+          "iterationType": "ITERATE_BY_TOTAL_COUNT",
+          "continueOnError": null
+        }
+      },
+      "nodeLabel": "pagination_0",
+      "nodeDescription": null,
+      "requestSchema": null,
+      "responseSchema": {
+        "name": "getListOfInventoriesUsingGET",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"getListOfInventoriesUsingGET\",\n   \"fields\": [\n      {\n         \"type\": \"array\",\n         \"name\": \"data\",\n         \"items\": {\n            \"type\": \"record\",\n            \"name\": \"A8bb201e00b5240e0803da198a885f74\",\n            \"fields\": [\n               {\n                  \"type\": \"string\",\n                  \"name\": \"id\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"name\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"record\",\n                  \"name\": \"organization\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"id\",\n                        \"required\": false\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"value\",\n                        \"required\": false\n                     }\n                  ],\n                  \"required\": false\n               }\n            ]\n         },\n         \"required\": false\n      },\n      {\n         \"type\": \"record\",\n         \"name\": \"meta\",\n         \"fields\": [\n            {\n               \"type\": \"record\",\n               \"name\": \"page\",\n               \"fields\": [\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"number\",\n                     \"required\": false\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"size\",\n                     \"required\": false\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"totalElements\",\n                     \"required\": false\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"totalPages\",\n                     \"required\": false\n                  }\n               ],\n               \"required\": false\n            }\n         ],\n         \"required\": false\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "TRANSFORM",
+      "processContext": {
+        "DataTransformer": {
+          "type": "TRANSFORM",
+          "template": "{}",
+          "independentNode": false,
+          "continueOnError": null,
+          "isIndependentNode": false
+        }
+      },
+      "nodeLabel": "transform_6",
+      "nodeDescription": "GET List Vendors",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": "getListOfInventoriesUsingGET",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"getListOfInventoriesUsingGET\",\n   \"fields\": [\n      {\n         \"type\": \"array\",\n         \"name\": \"data\",\n         \"items\": {\n            \"type\": \"record\",\n            \"name\": \"A8bb201e00b5240e0803da198a885f74\",\n            \"fields\": [\n               {\n                  \"type\": \"string\",\n                  \"name\": \"id\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"name\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"record\",\n                  \"name\": \"organization\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"id\",\n                        \"required\": false\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"value\",\n                        \"required\": false\n                     }\n                  ],\n                  \"required\": false\n               }\n            ]\n         },\n         \"required\": false\n      },\n      {\n         \"type\": \"record\",\n         \"name\": \"meta\",\n         \"fields\": [\n            {\n               \"type\": \"record\",\n               \"name\": \"page\",\n               \"fields\": [\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"number\",\n                     \"required\": false\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"size\",\n                     \"required\": false\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"totalElements\",\n                     \"required\": false\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"totalPages\",\n                     \"required\": false\n                  }\n               ],\n               \"required\": false\n            }\n         ],\n         \"required\": false\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "HTTP",
+      "processContext": {
+        "HttpConnector": {
+          "type": "HTTP",
+          "headers": {},
+          "requestURI": "https://app.onetrust.com/api/inventory/v2/inventories/vendors?page={string}&size={string}",
+          "httpMethod": "GET",
+          "jweEncryptionRequired": false,
+          "jweDecryptionRequired": false,
+          "encryptionCredentialId": null,
+          "decryptionCredentialId": null,
+          "internal": true,
+          "continueOnError": "NONE",
+          "pathParams": {},
+          "queryParams": {
+            "size": "${(step.pagination_0.page_size)!}",
+            "page": "${(step.pagination_0.page_number)!}"
+          },
+          "isInternal": true,
+          "isDSPortal": false,
+          "viewType": null
+        }
+      },
+      "nodeLabel": "http_6",
+      "nodeDescription": "GET List Vendors",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": "getListOfInventoriesUsingGET",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"getListOfInventoriesUsingGET\",\n   \"fields\": [\n      {\n         \"type\": \"array\",\n         \"name\": \"data\",\n         \"items\": {\n            \"type\": \"record\",\n            \"name\": \"A8bb201e00b5240e0803da198a885f74\",\n            \"fields\": [\n               {\n                  \"type\": \"string\",\n                  \"name\": \"id\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"name\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"record\",\n                  \"name\": \"organization\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"id\",\n                        \"required\": false\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"value\",\n                        \"required\": false\n                     }\n                  ],\n                  \"required\": false\n               }\n            ]\n         },\n         \"required\": false\n      },\n      {\n         \"type\": \"record\",\n         \"name\": \"meta\",\n         \"fields\": [\n            {\n               \"type\": \"record\",\n               \"name\": \"page\",\n               \"fields\": [\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"number\",\n                     \"required\": false\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"size\",\n                     \"required\": false\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"totalElements\",\n                     \"required\": false\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"totalPages\",\n                     \"required\": false\n                  }\n               ],\n               \"required\": false\n            }\n         ],\n         \"required\": false\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "APPLYEACH",
+      "processContext": {
+        "ApplyEach": {
+          "type": "APPLYEACH",
+          "jsonPath": "http_6:$..data.*",
+          "listKey": "step.http_6.data",
+          "commonNodeLabel": "messagelog",
+          "continueOnError": null
+        }
+      },
+      "nodeLabel": "applyEach_0",
+      "nodeDescription": null,
+      "requestSchema": null,
+      "responseSchema": {
+        "name": "getListOfInventoriesUsingGET",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"getListOfInventoriesUsingGET\",\n   \"fields\": [\n      {\n         \"type\": \"array\",\n         \"name\": \"data\",\n         \"items\": {\n            \"type\": \"record\",\n            \"name\": \"A8bb201e00b5240e0803da198a885f74\",\n            \"fields\": [\n               {\n                  \"type\": \"string\",\n                  \"name\": \"id\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"name\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"record\",\n                  \"name\": \"organization\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"id\",\n                        \"required\": false\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"value\",\n                        \"required\": false\n                     }\n                  ],\n                  \"required\": false\n               }\n            ]\n         },\n         \"required\": false\n      },\n      {\n         \"type\": \"record\",\n         \"name\": \"meta\",\n         \"fields\": [\n            {\n               \"type\": \"record\",\n               \"name\": \"page\",\n               \"fields\": [\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"number\",\n                     \"required\": false\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"size\",\n                     \"required\": false\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"totalElements\",\n                     \"required\": false\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"totalPages\",\n                     \"required\": false\n                  }\n               ],\n               \"required\": false\n            }\n         ],\n         \"required\": false\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "TRANSFORM",
+      "processContext": {
+        "DataTransformer": {
+          "type": "TRANSFORM",
+          "template": "{}",
+          "independentNode": false,
+          "continueOnError": null,
+          "isIndependentNode": false
+        }
+      },
+      "nodeLabel": "transform_1",
+      "nodeDescription": "GET Get Vendor",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": "getInventoryByIdUsingGET",
+        "description": null,
+        "schema": "{\n   \"format\": \"JSON\",\n   \"type\": \"record\",\n   \"fields\": [\n      {\n         \"format\": \"JSON\",\n         \"type\": \"record\",\n         \"name\": \"data\",\n         \"fields\": [\n            {\n               \"type\": \"string\",\n               \"name\": \"id\",\n               \"default\": \"636245c1-2948-44d2-8027-699f9813577c\"\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"name\",\n               \"default\": \"Amazon.com, Inc.\"\n            },\n            {\n               \"format\": \"JSON\",\n               \"type\": \"record\",\n               \"name\": \"organization\",\n               \"fields\": [\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"value\",\n                     \"default\": \"SecurityScorecard - Training\"\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"id\",\n                     \"default\": \"62365c7d-d5ae-44d8-833c-4de92ab20330\"\n                  }\n               ]\n            },\n            {\n               \"format\": \"JSON\",\n               \"type\": \"record\",\n               \"name\": \"type\",\n               \"fields\": [\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"value\",\n                     \"default\": \"Consulting\"\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"id\",\n                     \"default\": \"0622e71a-317f-4da1-8e08-1d85933ae0de\"\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"valueKey\",\n                     \"default\": \"VendorsTypeConsulting\"\n                  }\n               ]\n            },\n            {\n               \"type\": \"boolean\",\n               \"name\": \"isEditable\",\n               \"default\": true\n            },\n            {\n               \"format\": \"JSON\",\n               \"type\": \"record\",\n               \"name\": \"status\",\n               \"fields\": [\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"key\",\n                     \"default\": \"active\"\n                  }\n               ]\n            },\n            {\n               \"type\": \"double\",\n               \"name\": \"number\",\n               \"default\": 7\n            },\n            {\n               \"type\": \"boolean\",\n               \"name\": \"isParent\",\n               \"default\": false\n            },\n            {\n               \"format\": \"JSON\",\n               \"type\": \"record\",\n               \"name\": \"workflow\",\n               \"fields\": [\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"value\",\n                     \"default\": \"Default Onboarding\"\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"id\",\n                     \"default\": \"299a7f91-35c4-4971-8988-30e170080281\"\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"valueKey\",\n                     \"default\": \"DefaultOnBoarding\"\n                  }\n               ]\n            },\n            {\n               \"format\": \"JSON\",\n               \"type\": \"record\",\n               \"name\": \"workflowStage\",\n               \"fields\": [\n                  {\n                     \"format\": \"JSON\",\n                     \"type\": \"record\",\n                     \"name\": \"stage\",\n                     \"fields\": [\n                        {\n                           \"type\": \"string\",\n                           \"name\": \"value\",\n                           \"default\": \"In Review\"\n                        },\n                        {\n                           \"type\": \"string\",\n                           \"name\": \"id\",\n                           \"default\": \"fef23427-9dc8-4992-94b5-767a8cdb33a6\"\n                        },\n                        {\n                           \"type\": \"string\",\n                           \"name\": \"valueKey\",\n                           \"default\": \"VendorWorkflowStageInReview\"\n                        }\n                     ]\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"badgeColor\",\n                     \"default\": \"UnderReview\"\n                  }\n               ]\n            },\n            {\n               \"format\": \"JSON\",\n               \"type\": \"record\",\n               \"name\": \"updatedBy\",\n               \"fields\": [\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"id\",\n                     \"default\": \"b9a4c4ef-0318-47d9-98cf-0a215074f6d6\"\n                  }\n               ]\n            },\n            {\n               \"format\": \"JSON\",\n               \"type\": \"record\",\n               \"name\": \"createdBy\",\n               \"fields\": [\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"id\",\n                     \"default\": \"b9a4c4ef-0318-47d9-98cf-0a215074f6d6\"\n                  }\n               ]\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"createdDate\",\n               \"default\": \"2021-03-29T15:30:50.123Z\"\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"updatedDate\",\n               \"default\": \"2021-12-07T22:30:48.353Z\"\n            },\n            {\n               \"type\": \"array\",\n               \"name\": \"customField1000\",\n               \"items\": {\n                  \"format\": \"JSON\",\n                  \"type\": \"record\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"id\",\n                        \"default\": \"591d5e9a-6e7f-4492-bdb7-0b183b9c115c\"\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"value\",\n                        \"default\": \"Yes\"\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"valueKey\",\n                        \"default\": \"591d5e9a-6e7f-4492-bdb7-0b183b9c115c\"\n                     }\n                  ]\n               }\n            },\n            {\n               \"type\": \"array\",\n               \"name\": \"location\",\n               \"items\": {\n                  \"format\": \"JSON\",\n                  \"type\": \"record\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"id\",\n                        \"default\": \"00000000-0000-0000-0000-000000000000\"\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"value\",\n                        \"default\": \"Unknown\"\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"valueKey\",\n                        \"default\": \"Unknown\"\n                     }\n                  ]\n               }\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"overviewSecurityPolicyLink\",\n               \"default\": \"https://aws.amazon.com/worklink/\"\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"overviewPrivacyPolicyLink\",\n               \"default\": \"https://aws.amazon.com/privacy/\"\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"overviewIndustry\",\n               \"default\": \"Technology\"\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"overviewMeasuresForDataTransferLink\",\n               \"default\": \"https://aws.amazon.com/compliance/gdpr-center/\"\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"overviewStandardContractualClausesLink\",\n               \"default\": \"https://aws.amazon.com/blogs/security/aws-gdpr-data-processing-addendum/\"\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"vendorpediaBusinessKey\",\n               \"default\": \"amazoncominc\"\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"customField1005\",\n               \"default\": \"amazon.com\"\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"overviewWebsite\",\n               \"default\": \"https://www.amazon.com/Inc/s?k=Inc.\"\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"overviewAbout\",\n               \"default\": \"Amazon wants to be the closest company to its customers in the world, where everyone should be able to find what they want to buy online. By giving customers more than they want - low prices, a huge choice of products - Amazon continues to grow and evolve as an international e-commerce site. Founded by Jeff Bezos, the Amazon.com site was launched in 1995 to be the place where book lovers could have a unique experience.\"\n            }\n         ]\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "HTTP",
+      "processContext": {
+        "HttpConnector": {
+          "type": "HTTP",
+          "headers": {},
+          "requestURI": "https://app.onetrust.com/api/inventory/v2/inventories/vendors/(id)",
+          "httpMethod": "GET",
+          "jweEncryptionRequired": false,
+          "jweDecryptionRequired": false,
+          "encryptionCredentialId": null,
+          "decryptionCredentialId": null,
+          "internal": true,
+          "continueOnError": "NONE",
+          "pathParams": {
+            "(id)": "${(step.applyEach_0.id)!}"
+          },
+          "queryParams": {},
+          "isInternal": true,
+          "isDSPortal": false,
+          "viewType": null
+        }
+      },
+      "nodeLabel": "http_1",
+      "nodeDescription": "GET Get Vendor",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": "getInventoryByIdUsingGET",
+        "description": null,
+        "schema": "{\n   \"format\": \"JSON\",\n   \"type\": \"record\",\n   \"fields\": [\n      {\n         \"format\": \"JSON\",\n         \"type\": \"record\",\n         \"name\": \"data\",\n         \"fields\": [\n            {\n               \"type\": \"string\",\n               \"name\": \"id\",\n               \"default\": \"636245c1-2948-44d2-8027-699f9813577c\"\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"name\",\n               \"default\": \"Amazon.com, Inc.\"\n            },\n            {\n               \"format\": \"JSON\",\n               \"type\": \"record\",\n               \"name\": \"organization\",\n               \"fields\": [\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"value\",\n                     \"default\": \"SecurityScorecard - Training\"\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"id\",\n                     \"default\": \"62365c7d-d5ae-44d8-833c-4de92ab20330\"\n                  }\n               ]\n            },\n            {\n               \"format\": \"JSON\",\n               \"type\": \"record\",\n               \"name\": \"type\",\n               \"fields\": [\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"value\",\n                     \"default\": \"Consulting\"\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"id\",\n                     \"default\": \"0622e71a-317f-4da1-8e08-1d85933ae0de\"\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"valueKey\",\n                     \"default\": \"VendorsTypeConsulting\"\n                  }\n               ]\n            },\n            {\n               \"type\": \"boolean\",\n               \"name\": \"isEditable\",\n               \"default\": true\n            },\n            {\n               \"format\": \"JSON\",\n               \"type\": \"record\",\n               \"name\": \"status\",\n               \"fields\": [\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"key\",\n                     \"default\": \"active\"\n                  }\n               ]\n            },\n            {\n               \"type\": \"double\",\n               \"name\": \"number\",\n               \"default\": 7\n            },\n            {\n               \"type\": \"boolean\",\n               \"name\": \"isParent\",\n               \"default\": false\n            },\n            {\n               \"format\": \"JSON\",\n               \"type\": \"record\",\n               \"name\": \"workflow\",\n               \"fields\": [\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"value\",\n                     \"default\": \"Default Onboarding\"\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"id\",\n                     \"default\": \"299a7f91-35c4-4971-8988-30e170080281\"\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"valueKey\",\n                     \"default\": \"DefaultOnBoarding\"\n                  }\n               ]\n            },\n            {\n               \"format\": \"JSON\",\n               \"type\": \"record\",\n               \"name\": \"workflowStage\",\n               \"fields\": [\n                  {\n                     \"format\": \"JSON\",\n                     \"type\": \"record\",\n                     \"name\": \"stage\",\n                     \"fields\": [\n                        {\n                           \"type\": \"string\",\n                           \"name\": \"value\",\n                           \"default\": \"In Review\"\n                        },\n                        {\n                           \"type\": \"string\",\n                           \"name\": \"id\",\n                           \"default\": \"fef23427-9dc8-4992-94b5-767a8cdb33a6\"\n                        },\n                        {\n                           \"type\": \"string\",\n                           \"name\": \"valueKey\",\n                           \"default\": \"VendorWorkflowStageInReview\"\n                        }\n                     ]\n                  },\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"badgeColor\",\n                     \"default\": \"UnderReview\"\n                  }\n               ]\n            },\n            {\n               \"format\": \"JSON\",\n               \"type\": \"record\",\n               \"name\": \"updatedBy\",\n               \"fields\": [\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"id\",\n                     \"default\": \"b9a4c4ef-0318-47d9-98cf-0a215074f6d6\"\n                  }\n               ]\n            },\n            {\n               \"format\": \"JSON\",\n               \"type\": \"record\",\n               \"name\": \"createdBy\",\n               \"fields\": [\n                  {\n                     \"type\": \"string\",\n                     \"name\": \"id\",\n                     \"default\": \"b9a4c4ef-0318-47d9-98cf-0a215074f6d6\"\n                  }\n               ]\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"createdDate\",\n               \"default\": \"2021-03-29T15:30:50.123Z\"\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"updatedDate\",\n               \"default\": \"2021-12-07T22:30:48.353Z\"\n            },\n            {\n               \"type\": \"array\",\n               \"name\": \"customField1000\",\n               \"items\": {\n                  \"format\": \"JSON\",\n                  \"type\": \"record\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"id\",\n                        \"default\": \"591d5e9a-6e7f-4492-bdb7-0b183b9c115c\"\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"value\",\n                        \"default\": \"Yes\"\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"valueKey\",\n                        \"default\": \"591d5e9a-6e7f-4492-bdb7-0b183b9c115c\"\n                     }\n                  ]\n               }\n            },\n            {\n               \"type\": \"array\",\n               \"name\": \"location\",\n               \"items\": {\n                  \"format\": \"JSON\",\n                  \"type\": \"record\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"id\",\n                        \"default\": \"00000000-0000-0000-0000-000000000000\"\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"value\",\n                        \"default\": \"Unknown\"\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"valueKey\",\n                        \"default\": \"Unknown\"\n                     }\n                  ]\n               }\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"overviewSecurityPolicyLink\",\n               \"default\": \"https://aws.amazon.com/worklink/\"\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"overviewPrivacyPolicyLink\",\n               \"default\": \"https://aws.amazon.com/privacy/\"\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"overviewIndustry\",\n               \"default\": \"Technology\"\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"overviewMeasuresForDataTransferLink\",\n               \"default\": \"https://aws.amazon.com/compliance/gdpr-center/\"\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"overviewStandardContractualClausesLink\",\n               \"default\": \"https://aws.amazon.com/blogs/security/aws-gdpr-data-processing-addendum/\"\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"vendorpediaBusinessKey\",\n               \"default\": \"amazoncominc\"\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"customField1005\",\n               \"default\": \"amazon.com\"\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"overviewWebsite\",\n               \"default\": \"https://www.amazon.com/Inc/s?k=Inc.\"\n            },\n            {\n               \"type\": \"string\",\n               \"name\": \"overviewAbout\",\n               \"default\": \"Amazon wants to be the closest company to its customers in the world, where everyone should be able to find what they want to buy online. By giving customers more than they want - low prices, a huge choice of products - Amazon continues to grow and evolve as an international e-commerce site. Founded by Jeff Bezos, the Amazon.com site was launched in 1995 to be the place where book lovers could have a unique experience.\"\n            }\n         ]\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "TRANSFORM",
+      "processContext": {
+        "DataTransformer": {
+          "type": "TRANSFORM",
+          "template": "",
+          "independentNode": false,
+          "continueOnError": null,
+          "isIndependentNode": false
+        }
+      },
+      "nodeLabel": "transform_condition_1",
+      "nodeDescription": null,
+      "requestSchema": null,
+      "responseSchema": {
+        "name": null,
+        "description": null,
+        "schema": null
+      }
+    },
+    {
+      "processType": "CONDITION",
+      "processContext": {
+        "Condition": {
+          "type": "CONDITION",
+          "condition": {
+            "AndExpression": {
+              "type": "AND_EXPRESSION",
+              "expressions": [
+                {
+                  "AndExpression": {
+                    "type": "AND_EXPRESSION",
+                    "expressions": [
+                      {
+                        "BinaryExpression": {
+                          "type": "BINARY_EXPRESSION",
+                          "lookupField": "${(step.http_1.data.customField1000[0].value)!}",
+                          "operator": "EQUAL_TO",
+                          "value": "Yes",
+                          "name": null,
+                          "valueLoad": null
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "trueNodeLabel": "transform_7",
+          "falseNodeLabel": null,
+          "commonNodeLabel": null,
+          "conditionalStatus": null,
+          "continueOnError": null
+        }
+      },
+      "nodeLabel": "condition_1",
+      "nodeDescription": null,
+      "requestSchema": null,
+      "responseSchema": {
+        "name": null,
+        "description": null,
+        "schema": null
+      }
+    },
+    {
+      "processType": "TRANSFORM",
+      "processContext": {
+        "DataTransformer": {
+          "type": "TRANSFORM",
+          "template": "",
+          "independentNode": false,
+          "continueOnError": null,
+          "isIndependentNode": false
+        }
+      },
+      "nodeLabel": "transform_7",
+      "nodeDescription": "Get a company information and scorecard summary",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": "Get a company information and scorecard summary",
+        "description": null,
+        "schema": "{\n   \"format\": \"JSON\",\n   \"type\": \"record\",\n   \"fields\": [\n      {\n         \"type\": \"string\",\n         \"name\": \"name\",\n         \"default\": \"Amazon\"\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"domain\",\n         \"default\": \"amazon.com\"\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"gradeurl\",\n         \"original_name\": \"grade_url\",\n         \"default\": \"https://s3.amazonaws.com/ssc-static/grades/factor_c.svg\"\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"industry\",\n         \"default\": \"technology\"\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"size\",\n         \"default\": \"size_more_than_10000\"\n      },\n      {\n         \"type\": \"double\",\n         \"name\": \"score\",\n         \"default\": 72\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"grade\",\n         \"default\": \"C\"\n      },\n      {\n         \"type\": \"double\",\n         \"name\": \"last30dayscorechange\",\n         \"original_name\": \"last30day_score_change\",\n         \"default\": 1\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"createdat\",\n         \"original_name\": \"created_at\",\n         \"default\": \"2014-04-18T22:52:54.305Z\"\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "HTTP",
+      "processContext": {
+        "HttpConnector": {
+          "type": "HTTP",
+          "headers": {
+            "Authorization": "Token jrjqVHLJuPIE3DRFaqwP5bqfsxZl"
+          },
+          "requestURI": "https://api.securityscorecard.io/companies/${(step.http_1.data.customField1005)!}",
+          "httpMethod": "GET",
+          "jweEncryptionRequired": false,
+          "jweDecryptionRequired": false,
+          "encryptionCredentialId": null,
+          "decryptionCredentialId": null,
+          "internal": false,
+          "continueOnError": "NONE",
+          "pathParams": {},
+          "queryParams": {},
+          "isInternal": false,
+          "isDSPortal": false,
+          "viewType": null
+        }
+      },
+      "nodeLabel": "http_7",
+      "nodeDescription": "Get a company information and scorecard summary",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": "Get a company information and scorecard summary",
+        "description": null,
+        "schema": "{\n   \"format\": \"JSON\",\n   \"type\": \"record\",\n   \"fields\": [\n      {\n         \"type\": \"string\",\n         \"name\": \"name\",\n         \"default\": \"Amazon\"\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"domain\",\n         \"default\": \"amazon.com\"\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"gradeurl\",\n         \"original_name\": \"grade_url\",\n         \"default\": \"https://s3.amazonaws.com/ssc-static/grades/factor_c.svg\"\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"industry\",\n         \"default\": \"technology\"\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"size\",\n         \"default\": \"size_more_than_10000\"\n      },\n      {\n         \"type\": \"double\",\n         \"name\": \"score\",\n         \"default\": 72\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"grade\",\n         \"default\": \"C\"\n      },\n      {\n         \"type\": \"double\",\n         \"name\": \"last30dayscorechange\",\n         \"original_name\": \"last30day_score_change\",\n         \"default\": 1\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"createdat\",\n         \"original_name\": \"created_at\",\n         \"default\": \"2014-04-18T22:52:54.305Z\"\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "TRANSFORM",
+      "processContext": {
+        "DataTransformer": {
+          "type": "TRANSFORM",
+          "template": "{\n   \"customField1001\": \"${(step.http_7.grade)!}\",\n   \"customField1004\": \"${(step.http_7.industry)!}\",\n   \"customField1007\": \"${(step.http_7.last30day_score_change)!}\",\n   \"customField1006\": \"${(step.http_7.name)!}\",\n   \"customField1003\": \"${(step.http_7.score)!}\"\n}",
+          "independentNode": false,
+          "continueOnError": null,
+          "isIndependentNode": false
+        }
+      },
+      "nodeLabel": "transform_9",
+      "nodeDescription": "PUT Update Vendor",
+      "requestSchema": {
+        "name": "updateInventoryUsingPUT",
+        "description": "Inventory Update Request",
+        "schema": "{\"type\":\"record\",\"name\":\"updateInventoryUsingPUT\",\"doc\":\"Inventory Update Request\",\"fields\":[{\"type\":\"array\",\"name\":\"exampleSingleSelectField\",\"items\":{\"type\":\"record\",\"name\":\"Ac5fd8380768c4ab7b381ce9368a196d\",\"fields\":[{\"type\":\"string\",\"name\":\"id\",\"required\":false},{\"type\":\"string\",\"name\":\"value\",\"required\":false}]},\"required\":false},{\"type\":\"array\",\"name\":\"exampleMultiSelectField\",\"items\":{\"type\":\"record\",\"name\":\"A00679e97baad47bcb97916c6c4d3a05\",\"fields\":[{\"type\":\"string\",\"name\":\"id\",\"required\":false},{\"type\":\"string\",\"name\":\"value\",\"required\":false}]},\"required\":false},{\"type\":\"string\",\"name\":\"exampleTextField\",\"required\":false}]}"
+      },
+      "responseSchema": {
+        "name": "updateInventoryUsingPUT",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"updateInventoryUsingPUT\",\n   \"fields\": [\n      {\n         \"type\": \"record\",\n         \"name\": \"data\",\n         \"fields\": [],\n         \"required\": false\n      },\n      {\n         \"type\": \"array\",\n         \"name\": \"errors\",\n         \"items\": {\n            \"type\": \"record\",\n            \"name\": \"A28248975265b42aba20c4b5927ef653\",\n            \"fields\": [\n               {\n                  \"type\": \"string\",\n                  \"name\": \"code\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"detail\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"record\",\n                  \"name\": \"source\",\n                  \"doc\": \"ErrorSource\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"parameter\",\n                        \"required\": false\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"pointer\",\n                        \"required\": false\n                     }\n                  ],\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"title\",\n                  \"required\": false\n               }\n            ]\n         },\n         \"required\": false\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "HTTP",
+      "processContext": {
+        "HttpConnector": {
+          "type": "HTTP",
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "requestURI": "https://app.onetrust.com/api/inventory/v2/inventories/vendors/(id)",
+          "httpMethod": "PUT",
+          "jweEncryptionRequired": false,
+          "jweDecryptionRequired": false,
+          "encryptionCredentialId": null,
+          "decryptionCredentialId": null,
+          "internal": true,
+          "continueOnError": "NONE",
+          "pathParams": {
+            "(id)": "${(step.applyEach_0.id)!}"
+          },
+          "queryParams": {},
+          "isInternal": true,
+          "isDSPortal": false,
+          "viewType": null
+        }
+      },
+      "nodeLabel": "http_9",
+      "nodeDescription": "PUT Update Vendor",
+      "requestSchema": {
+        "name": "updateInventoryUsingPUT",
+        "description": "Inventory Update Request",
+        "schema": "{\"type\":\"record\",\"name\":\"updateInventoryUsingPUT\",\"doc\":\"Inventory Update Request\",\"fields\":[{\"type\":\"array\",\"name\":\"exampleSingleSelectField\",\"items\":{\"type\":\"record\",\"name\":\"Ac5fd8380768c4ab7b381ce9368a196d\",\"fields\":[{\"type\":\"string\",\"name\":\"id\",\"required\":false},{\"type\":\"string\",\"name\":\"value\",\"required\":false}]},\"required\":false},{\"type\":\"array\",\"name\":\"exampleMultiSelectField\",\"items\":{\"type\":\"record\",\"name\":\"A00679e97baad47bcb97916c6c4d3a05\",\"fields\":[{\"type\":\"string\",\"name\":\"id\",\"required\":false},{\"type\":\"string\",\"name\":\"value\",\"required\":false}]},\"required\":false},{\"type\":\"string\",\"name\":\"exampleTextField\",\"required\":false}]}"
+      },
+      "responseSchema": {
+        "name": "updateInventoryUsingPUT",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"updateInventoryUsingPUT\",\n   \"fields\": [\n      {\n         \"type\": \"record\",\n         \"name\": \"data\",\n         \"fields\": [],\n         \"required\": false\n      },\n      {\n         \"type\": \"array\",\n         \"name\": \"errors\",\n         \"items\": {\n            \"type\": \"record\",\n            \"name\": \"A28248975265b42aba20c4b5927ef653\",\n            \"fields\": [\n               {\n                  \"type\": \"string\",\n                  \"name\": \"code\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"detail\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"record\",\n                  \"name\": \"source\",\n                  \"doc\": \"ErrorSource\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"parameter\",\n                        \"required\": false\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"pointer\",\n                        \"required\": false\n                     }\n                  ],\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"title\",\n                  \"required\": false\n               }\n            ]\n         },\n         \"required\": false\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "MESSAGELOG",
+      "processContext": {
+        "MessageLog": {
+          "type": "MESSAGELOG",
+          "continueOnError": null
+        }
+      },
+      "nodeLabel": "messagelog",
+      "nodeDescription": "Terminating Node : messagelog",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": null,
+        "description": null,
+        "schema": null
+      }
+    }
+  ],
+  "directions": [
+    {
+      "startNode": "transform_0",
+      "endNode": "http_0"
+    },
+    {
+      "startNode": "http_0",
+      "endNode": "pagination_0"
+    },
+    {
+      "startNode": "pagination_0",
+      "endNode": "transform_6"
+    },
+    {
+      "startNode": "transform_6",
+      "endNode": "http_6"
+    },
+    {
+      "startNode": "http_6",
+      "endNode": "applyEach_0"
+    },
+    {
+      "startNode": "applyEach_0",
+      "endNode": "transform_1"
+    },
+    {
+      "startNode": "transform_1",
+      "endNode": "http_1"
+    },
+    {
+      "startNode": "http_1",
+      "endNode": "transform_condition_1"
+    },
+    {
+      "startNode": "transform_condition_1",
+      "endNode": "condition_1"
+    },
+    {
+      "startNode": "condition_1",
+      "endNode": "transform_7"
+    },
+    {
+      "startNode": "transform_7",
+      "endNode": "http_7"
+    },
+    {
+      "startNode": "http_7",
+      "endNode": "transform_9"
+    },
+    {
+      "startNode": "transform_9",
+      "endNode": "http_9"
+    },
+    {
+      "startNode": "applyEach_0",
+      "endNode": "messagelog"
+    }
+  ],
+  "categoryBitValue": 17152,
+  "moduleBitValue": 52,
+  "seedSystem": false,
+  "halted": false,
+  "dlqEnabled": false
+}

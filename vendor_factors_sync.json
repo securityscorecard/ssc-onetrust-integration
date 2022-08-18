@@ -1,0 +1,413 @@
+{
+  "name": "SecurityScorecard Factors Sync",
+  "enabled": false,
+  "workflowType": "COMPOSITE",
+  "integrationName": "SecurityScorecard Factors Sync",
+  "referenceIntegrationName": "SecurityScorecard",
+  "dlqMessageCount": 0,
+  "throttlingLimit": 0,
+  "defaultDlqAction": "NONE",
+  "failedAlertFrequencyHrs": 0,
+  "formatVersion": "1.0",
+  "trigger": {
+    "name": "SecurityScorecard Factors Sync",
+    "workflowName": "SecurityScorecard Factors Sync",
+    "triggerType": "EVENT",
+    "triggerContext": {
+      "EventTrigger": {
+        "type": "EVENT",
+        "eventCode": "5502",
+        "condition": null,
+        "baseCondition": null,
+        "preCondition": null,
+        "subFlow": false,
+        "config": false,
+        "webhook": false
+      }
+    },
+    "description": null,
+    "eventCode": "5502",
+    "schema": null
+  },
+  "actions": [
+    {
+      "processType": "TRANSFORM",
+      "processContext": {
+        "DataTransformer": {
+          "type": "TRANSFORM",
+          "template": "{}",
+          "independentNode": false,
+          "continueOnError": null,
+          "isIndependentNode": false
+        }
+      },
+      "nodeLabel": "transform_0",
+      "nodeDescription": "GET Get Vendor",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": "getInventoryByIdUsingGET",
+        "description": null,
+        "schema": "{\n   \"format\": \"JSON\",\n   \"type\": \"record\",\n   \"fields\": [\n      {\n         \"format\": \"JSON\",\n         \"type\": \"record\",\n         \"name\": \"data\",\n         \"fields\": []\n      },\n      {\n         \"type\": \"array\",\n         \"name\": \"errors\",\n         \"items\": {\n            \"format\": \"JSON\",\n            \"type\": \"record\",\n            \"fields\": [\n               {\n                  \"type\": \"string\",\n                  \"name\": \"code\",\n                  \"default\": \"string_value\"\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"detail\",\n                  \"default\": \"string_value\"\n               },\n               {\n                  \"format\": \"JSON\",\n                  \"type\": \"record\",\n                  \"name\": \"source\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"parameter\",\n                        \"default\": \"string_value\"\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"pointer\",\n                        \"default\": \"string_value\"\n                     }\n                  ]\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"title\",\n                  \"default\": \"string_value\"\n               }\n            ]\n         }\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "HTTP",
+      "processContext": {
+        "HttpConnector": {
+          "type": "HTTP",
+          "headers": {},
+          "requestURI": "https://app.onetrust.com/api/inventory/v2/inventories/vendors/(id)",
+          "httpMethod": "GET",
+          "jweEncryptionRequired": false,
+          "jweDecryptionRequired": false,
+          "encryptionCredentialId": null,
+          "decryptionCredentialId": null,
+          "internal": true,
+          "continueOnError": "NONE",
+          "pathParams": {
+            "(id)": "${(event.payload.inventory.id)!}"
+          },
+          "queryParams": {},
+          "isInternal": true,
+          "isDSPortal": false,
+          "viewType": null
+        }
+      },
+      "nodeLabel": "http_0",
+      "nodeDescription": "GET Get Vendor",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": "getInventoryByIdUsingGET",
+        "description": null,
+        "schema": "{\n   \"format\": \"JSON\",\n   \"type\": \"record\",\n   \"fields\": [\n      {\n         \"format\": \"JSON\",\n         \"type\": \"record\",\n         \"name\": \"data\",\n         \"fields\": []\n      },\n      {\n         \"type\": \"array\",\n         \"name\": \"errors\",\n         \"items\": {\n            \"format\": \"JSON\",\n            \"type\": \"record\",\n            \"fields\": [\n               {\n                  \"type\": \"string\",\n                  \"name\": \"code\",\n                  \"default\": \"string_value\"\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"detail\",\n                  \"default\": \"string_value\"\n               },\n               {\n                  \"format\": \"JSON\",\n                  \"type\": \"record\",\n                  \"name\": \"source\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"parameter\",\n                        \"default\": \"string_value\"\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"pointer\",\n                        \"default\": \"string_value\"\n                     }\n                  ]\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"title\",\n                  \"default\": \"string_value\"\n               }\n            ]\n         }\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "TRANSFORM",
+      "processContext": {
+        "DataTransformer": {
+          "type": "TRANSFORM",
+          "template": "",
+          "independentNode": false,
+          "continueOnError": null,
+          "isIndependentNode": false
+        }
+      },
+      "nodeLabel": "transform_condition_0",
+      "nodeDescription": null,
+      "requestSchema": null,
+      "responseSchema": {
+        "name": null,
+        "description": null,
+        "schema": null
+      }
+    },
+    {
+      "processType": "CONDITION",
+      "processContext": {
+        "Condition": {
+          "type": "CONDITION",
+          "condition": {
+            "AndExpression": {
+              "type": "AND_EXPRESSION",
+              "expressions": [
+                {
+                  "AndExpression": {
+                    "type": "AND_EXPRESSION",
+                    "expressions": [
+                      {
+                        "BinaryExpression": {
+                          "type": "BINARY_EXPRESSION",
+                          "lookupField": "${(step.http_0.data.customField1000[0].value)!}",
+                          "operator": "EQUAL_TO",
+                          "value": "Yes",
+                          "name": null,
+                          "valueLoad": null
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "trueNodeLabel": "transform_1",
+          "falseNodeLabel": "transform_2",
+          "commonNodeLabel": "messagelog",
+          "conditionalStatus": null,
+          "continueOnError": null
+        }
+      },
+      "nodeLabel": "condition_0",
+      "nodeDescription": null,
+      "requestSchema": null,
+      "responseSchema": {
+        "name": null,
+        "description": null,
+        "schema": null
+      }
+    },
+    {
+      "processType": "MESSAGELOG",
+      "processContext": {
+        "MessageLog": {
+          "type": "MESSAGELOG",
+          "continueOnError": null
+        }
+      },
+      "nodeLabel": "messagelog",
+      "nodeDescription": "Terminating Node : messagelog",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": null,
+        "description": null,
+        "schema": null
+      }
+    },
+    {
+      "processType": "TRANSFORM",
+      "processContext": {
+        "DataTransformer": {
+          "type": "TRANSFORM",
+          "template": "{\n   \"customField1009\": \"\",\n   \"customField1010\": \"\",\n   \"customField1011\": \"\",\n   \"customField1012\": \"\",\n   \"customField1013\": \"\",\n   \"customField1014\": \"\",\n   \"customField1015\": \"\",\n   \"customField1016\": \"\",\n   \"customField1017\": \"\",\n   \"customField1018\": \"\"\n}",
+          "independentNode": false,
+          "continueOnError": null,
+          "isIndependentNode": false
+        }
+      },
+      "nodeLabel": "transform_2",
+      "nodeDescription": "PUT Update Vendor",
+      "requestSchema": {
+        "name": "updateInventoryUsingPUT",
+        "description": "Inventory Update Request",
+        "schema": "{\"type\":\"record\",\"name\":\"updateInventoryUsingPUT\",\"doc\":\"Inventory Update Request\",\"fields\":[{\"type\":\"array\",\"name\":\"exampleSingleSelectField\",\"items\":{\"type\":\"record\",\"name\":\"Af293859888ef4c0a8815f9811b5963d\",\"fields\":[{\"type\":\"string\",\"name\":\"id\",\"required\":false},{\"type\":\"string\",\"name\":\"value\",\"required\":false}]},\"required\":false},{\"type\":\"array\",\"name\":\"exampleMultiSelectField\",\"items\":{\"type\":\"record\",\"name\":\"Ac67e5ade0f6641499d62b4f187ea393\",\"fields\":[{\"type\":\"string\",\"name\":\"id\",\"required\":false},{\"type\":\"string\",\"name\":\"value\",\"required\":false}]},\"required\":false},{\"type\":\"string\",\"name\":\"exampleTextField\",\"required\":false}]}"
+      },
+      "responseSchema": {
+        "name": "updateInventoryUsingPUT",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"updateInventoryUsingPUT\",\n   \"fields\": [\n      {\n         \"type\": \"record\",\n         \"name\": \"data\",\n         \"fields\": [],\n         \"required\": false\n      },\n      {\n         \"type\": \"array\",\n         \"name\": \"errors\",\n         \"items\": {\n            \"type\": \"record\",\n            \"name\": \"A59551366f8c544c0abc0decf833be0e\",\n            \"fields\": [\n               {\n                  \"type\": \"string\",\n                  \"name\": \"code\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"detail\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"record\",\n                  \"name\": \"source\",\n                  \"doc\": \"ErrorSource\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"parameter\",\n                        \"required\": false\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"pointer\",\n                        \"required\": false\n                     }\n                  ],\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"title\",\n                  \"required\": false\n               }\n            ]\n         },\n         \"required\": false\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "HTTP",
+      "processContext": {
+        "HttpConnector": {
+          "type": "HTTP",
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "requestURI": "https://app.onetrust.com/api/inventory/v2/inventories/vendors/(id)",
+          "httpMethod": "PUT",
+          "jweEncryptionRequired": false,
+          "jweDecryptionRequired": false,
+          "encryptionCredentialId": null,
+          "decryptionCredentialId": null,
+          "internal": true,
+          "continueOnError": "NONE",
+          "pathParams": {
+            "(id)": "${(event.payload.inventory.id)!}"
+          },
+          "queryParams": {},
+          "isInternal": true,
+          "isDSPortal": false,
+          "viewType": null
+        }
+      },
+      "nodeLabel": "http_2",
+      "nodeDescription": "PUT Update Vendor",
+      "requestSchema": {
+        "name": "updateInventoryUsingPUT",
+        "description": "Inventory Update Request",
+        "schema": "{\"type\":\"record\",\"name\":\"updateInventoryUsingPUT\",\"doc\":\"Inventory Update Request\",\"fields\":[{\"type\":\"array\",\"name\":\"exampleSingleSelectField\",\"items\":{\"type\":\"record\",\"name\":\"Af293859888ef4c0a8815f9811b5963d\",\"fields\":[{\"type\":\"string\",\"name\":\"id\",\"required\":false},{\"type\":\"string\",\"name\":\"value\",\"required\":false}]},\"required\":false},{\"type\":\"array\",\"name\":\"exampleMultiSelectField\",\"items\":{\"type\":\"record\",\"name\":\"Ac67e5ade0f6641499d62b4f187ea393\",\"fields\":[{\"type\":\"string\",\"name\":\"id\",\"required\":false},{\"type\":\"string\",\"name\":\"value\",\"required\":false}]},\"required\":false},{\"type\":\"string\",\"name\":\"exampleTextField\",\"required\":false}]}"
+      },
+      "responseSchema": {
+        "name": "updateInventoryUsingPUT",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"updateInventoryUsingPUT\",\n   \"fields\": [\n      {\n         \"type\": \"record\",\n         \"name\": \"data\",\n         \"fields\": [],\n         \"required\": false\n      },\n      {\n         \"type\": \"array\",\n         \"name\": \"errors\",\n         \"items\": {\n            \"type\": \"record\",\n            \"name\": \"A59551366f8c544c0abc0decf833be0e\",\n            \"fields\": [\n               {\n                  \"type\": \"string\",\n                  \"name\": \"code\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"detail\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"record\",\n                  \"name\": \"source\",\n                  \"doc\": \"ErrorSource\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"parameter\",\n                        \"required\": false\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"pointer\",\n                        \"required\": false\n                     }\n                  ],\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"title\",\n                  \"required\": false\n               }\n            ]\n         },\n         \"required\": false\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "TRANSFORM",
+      "processContext": {
+        "DataTransformer": {
+          "type": "TRANSFORM",
+          "template": "",
+          "independentNode": false,
+          "continueOnError": null,
+          "isIndependentNode": false
+        }
+      },
+      "nodeLabel": "transform_1",
+      "nodeDescription": "GET Get a company factor scores and issue counts",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": "A1c3d9e3ac68d4a5ba4addf74a212886",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"A1c3d9e3ac68d4a5ba4addf74a212886\",\n   \"fields\": [\n      {\n         \"name\": \"entries\",\n         \"type\": {\n            \"type\": \"array\",\n            \"items\": {\n               \"type\": \"record\",\n               \"name\": \"A287edf6dab2148adb02268399a9a8df\",\n               \"fields\": [\n                  {\n                     \"name\": \"name\",\n                     \"type\": \"string\",\n                     \"default\": \"network_security\",\n                     \"required\": false\n                  },\n                  {\n                     \"name\": \"score\",\n                     \"type\": \"long\",\n                     \"default\": 95,\n                     \"required\": false\n                  },\n                  {\n                     \"name\": \"grade\",\n                     \"type\": \"string\",\n                     \"default\": \"A\",\n                     \"required\": false\n                  },\n                  {\n                     \"name\": \"gradeurl\",\n                     \"type\": \"string\",\n                     \"original_name\": \"grade_url\",\n                     \"required\": false\n                  },\n                  {\n                     \"name\": \"issuesummary\",\n                     \"type\": {\n                        \"type\": \"array\",\n                        \"items\": {\n                           \"type\": \"record\",\n                           \"name\": \"A8f6a07d43b024a61b5d45cac358f150\",\n                           \"fields\": [\n                              {\n                                 \"name\": \"severity\",\n                                 \"type\": \"string\",\n                                 \"default\": \"medium\",\n                                 \"required\": false\n                              },\n                              {\n                                 \"name\": \"type\",\n                                 \"type\": \"string\",\n                                 \"default\": \"cookie_secure_flag\",\n                                 \"required\": false\n                              },\n                              {\n                                 \"name\": \"count\",\n                                 \"type\": \"long\",\n                                 \"default\": 5,\n                                 \"required\": false\n                              },\n                              {\n                                 \"name\": \"detailurl\",\n                                 \"type\": \"string\",\n                                 \"default\": \"https://api.securityscorecard.io/companies/example.com/issues/cookie_secure_flag\",\n                                 \"original_name\": \"detail_url\",\n                                 \"required\": false\n                              },\n                              {\n                                 \"name\": \"totalscoreimpact\",\n                                 \"type\": \"double\",\n                                 \"default\": 3.2,\n                                 \"original_name\": \"total_score_impact\",\n                                 \"required\": false\n                              }\n                           ]\n                        }\n                     },\n                     \"original_name\": \"issue_summary\",\n                     \"required\": false\n                  }\n               ]\n            }\n         },\n         \"required\": false\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "HTTP",
+      "processContext": {
+        "HttpConnector": {
+          "type": "HTTP",
+          "headers": {},
+          "requestURI": "https://api.securityscorecard.io/companies/${(step.http_0.data.customField1005)!}/factors",
+          "httpMethod": "GET",
+          "jweEncryptionRequired": false,
+          "jweDecryptionRequired": false,
+          "encryptionCredentialId": null,
+          "decryptionCredentialId": null,
+          "internal": false,
+          "continueOnError": "NONE",
+          "pathParams": {},
+          "queryParams": {},
+          "isInternal": false,
+          "isDSPortal": false,
+          "viewType": null
+        }
+      },
+      "nodeLabel": "http_1",
+      "nodeDescription": "GET Get a company factor scores and issue counts",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": "A1c3d9e3ac68d4a5ba4addf74a212886",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"A1c3d9e3ac68d4a5ba4addf74a212886\",\n   \"fields\": [\n      {\n         \"name\": \"entries\",\n         \"type\": {\n            \"type\": \"array\",\n            \"items\": {\n               \"type\": \"record\",\n               \"name\": \"A287edf6dab2148adb02268399a9a8df\",\n               \"fields\": [\n                  {\n                     \"name\": \"name\",\n                     \"type\": \"string\",\n                     \"default\": \"network_security\",\n                     \"required\": false\n                  },\n                  {\n                     \"name\": \"score\",\n                     \"type\": \"long\",\n                     \"default\": 95,\n                     \"required\": false\n                  },\n                  {\n                     \"name\": \"grade\",\n                     \"type\": \"string\",\n                     \"default\": \"A\",\n                     \"required\": false\n                  },\n                  {\n                     \"name\": \"gradeurl\",\n                     \"type\": \"string\",\n                     \"original_name\": \"grade_url\",\n                     \"required\": false\n                  },\n                  {\n                     \"name\": \"issuesummary\",\n                     \"type\": {\n                        \"type\": \"array\",\n                        \"items\": {\n                           \"type\": \"record\",\n                           \"name\": \"A8f6a07d43b024a61b5d45cac358f150\",\n                           \"fields\": [\n                              {\n                                 \"name\": \"severity\",\n                                 \"type\": \"string\",\n                                 \"default\": \"medium\",\n                                 \"required\": false\n                              },\n                              {\n                                 \"name\": \"type\",\n                                 \"type\": \"string\",\n                                 \"default\": \"cookie_secure_flag\",\n                                 \"required\": false\n                              },\n                              {\n                                 \"name\": \"count\",\n                                 \"type\": \"long\",\n                                 \"default\": 5,\n                                 \"required\": false\n                              },\n                              {\n                                 \"name\": \"detailurl\",\n                                 \"type\": \"string\",\n                                 \"default\": \"https://api.securityscorecard.io/companies/example.com/issues/cookie_secure_flag\",\n                                 \"original_name\": \"detail_url\",\n                                 \"required\": false\n                              },\n                              {\n                                 \"name\": \"totalscoreimpact\",\n                                 \"type\": \"double\",\n                                 \"default\": 3.2,\n                                 \"original_name\": \"total_score_impact\",\n                                 \"required\": false\n                              }\n                           ]\n                        }\n                     },\n                     \"original_name\": \"issue_summary\",\n                     \"required\": false\n                  }\n               ]\n            }\n         },\n         \"required\": false\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "TRANSFORM",
+      "processContext": {
+        "DataTransformer": {
+          "type": "TRANSFORM",
+          "template": "{\n<#list step.http_1.entries as n>\"${(n.name)!}\": \"${(n.grade)!}\"<#sep>,</#sep></#list>\n}",
+          "independentNode": true,
+          "continueOnError": null,
+          "isIndependentNode": true
+        }
+      },
+      "nodeLabel": "dataTransformator_0",
+      "nodeDescription": null,
+      "requestSchema": null,
+      "responseSchema": {
+        "name": "Data Transformer",
+        "description": null,
+        "schema": "{\"format\":\"JSON\",\"type\":\"record\",\"fields\":[{\"type\":\"string\",\"name\":\"applicationsecurity\",\"original_name\":\"application_security\",\"default\":\"80\"},{\"type\":\"string\",\"name\":\"cubitscore\",\"original_name\":\"cubit_score\",\"default\":\"90\"},{\"type\":\"string\",\"name\":\"dnshealth\",\"original_name\":\"dns_health\",\"default\":\"71\"},{\"type\":\"string\",\"name\":\"endpointsecurity\",\"original_name\":\"endpoint_security\",\"default\":\"48\"},{\"type\":\"string\",\"name\":\"hackerchatter\",\"original_name\":\"hacker_chatter\",\"default\":\"100\"},{\"type\":\"string\",\"name\":\"ipreputation\",\"original_name\":\"ip_reputation\",\"default\":\"26\"},{\"type\":\"string\",\"name\":\"leakedinformation\",\"original_name\":\"leaked_information\",\"default\":\"100\"},{\"type\":\"string\",\"name\":\"networksecurity\",\"original_name\":\"network_security\",\"default\":\"84\"},{\"type\":\"string\",\"name\":\"patchingcadence\",\"original_name\":\"patching_cadence\",\"default\":\"78\"},{\"type\":\"string\",\"name\":\"socialengineering\",\"original_name\":\"social_engineering\",\"default\":\"100\"}]}"
+      }
+    },
+    {
+      "processType": "TRANSFORM",
+      "processContext": {
+        "DataTransformer": {
+          "type": "TRANSFORM",
+          "template": "{\n   \"customField1009\": \"${(step.dataTransformator_0.network_security)!}\",\n   \"customField1010\": \"${(step.dataTransformator_0.dns_health)!}\",\n   \"customField1011\": \"${(step.dataTransformator_0.patching_cadence)!}\",\n   \"customField1012\": \"${(step.dataTransformator_0.endpoint_security)!}\",\n   \"customField1013\": \"${(step.dataTransformator_0.ip_reputation)!}\",\n   \"customField1014\": \"${(step.dataTransformator_0.application_security)!}\",\n   \"customField1015\": \"${(step.dataTransformator_0.cubit_score)!}\",\n   \"customField1016\": \"${(step.dataTransformator_0.hacker_chatter)!}\",\n   \"customField1017\": \"${(step.dataTransformator_0.leaked_information)!}\",\n   \"customField1018\": \"${(step.dataTransformator_0.social_engineering)!}\"\n}",
+          "independentNode": false,
+          "continueOnError": null,
+          "isIndependentNode": false
+        }
+      },
+      "nodeLabel": "transform_3",
+      "nodeDescription": "PUT Update Vendor",
+      "requestSchema": {
+        "name": "updateInventoryUsingPUT",
+        "description": "Inventory Update Request",
+        "schema": "{\"type\":\"record\",\"name\":\"updateInventoryUsingPUT\",\"doc\":\"Inventory Update Request\",\"fields\":[{\"type\":\"array\",\"name\":\"exampleSingleSelectField\",\"items\":{\"type\":\"record\",\"name\":\"A2b5c97b500e24e6e952bd01639262f7\",\"fields\":[{\"type\":\"string\",\"name\":\"id\",\"required\":false},{\"type\":\"string\",\"name\":\"value\",\"required\":false}]},\"required\":false},{\"type\":\"array\",\"name\":\"exampleMultiSelectField\",\"items\":{\"type\":\"record\",\"name\":\"A5044c9e7d95749a8ae7c68ca16238c9\",\"fields\":[{\"type\":\"string\",\"name\":\"id\",\"required\":false},{\"type\":\"string\",\"name\":\"value\",\"required\":false}]},\"required\":false},{\"type\":\"string\",\"name\":\"exampleTextField\",\"required\":false}]}"
+      },
+      "responseSchema": {
+        "name": "updateInventoryUsingPUT",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"updateInventoryUsingPUT\",\n   \"fields\": [\n      {\n         \"type\": \"record\",\n         \"name\": \"data\",\n         \"fields\": [],\n         \"required\": false\n      },\n      {\n         \"type\": \"array\",\n         \"name\": \"errors\",\n         \"items\": {\n            \"type\": \"record\",\n            \"name\": \"Aa4761045062f485e9ff3ff921a6c371\",\n            \"fields\": [\n               {\n                  \"type\": \"string\",\n                  \"name\": \"code\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"detail\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"record\",\n                  \"name\": \"source\",\n                  \"doc\": \"ErrorSource\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"parameter\",\n                        \"required\": false\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"pointer\",\n                        \"required\": false\n                     }\n                  ],\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"title\",\n                  \"required\": false\n               }\n            ]\n         },\n         \"required\": false\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "HTTP",
+      "processContext": {
+        "HttpConnector": {
+          "type": "HTTP",
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "requestURI": "https://app.onetrust.com/api/inventory/v2/inventories/vendors/(id)",
+          "httpMethod": "PUT",
+          "jweEncryptionRequired": false,
+          "jweDecryptionRequired": false,
+          "encryptionCredentialId": null,
+          "decryptionCredentialId": null,
+          "internal": true,
+          "continueOnError": "NONE",
+          "pathParams": {
+            "(id)": "${(event.payload.inventory.id)!}"
+          },
+          "queryParams": {},
+          "isInternal": true,
+          "isDSPortal": false,
+          "viewType": "ADVANCED"
+        }
+      },
+      "nodeLabel": "http_3",
+      "nodeDescription": "PUT Update Vendor",
+      "requestSchema": {
+        "name": "updateInventoryUsingPUT",
+        "description": "Inventory Update Request",
+        "schema": "{\"type\":\"record\",\"name\":\"updateInventoryUsingPUT\",\"doc\":\"Inventory Update Request\",\"fields\":[{\"type\":\"array\",\"name\":\"exampleSingleSelectField\",\"items\":{\"type\":\"record\",\"name\":\"A2b5c97b500e24e6e952bd01639262f7\",\"fields\":[{\"type\":\"string\",\"name\":\"id\",\"required\":false},{\"type\":\"string\",\"name\":\"value\",\"required\":false}]},\"required\":false},{\"type\":\"array\",\"name\":\"exampleMultiSelectField\",\"items\":{\"type\":\"record\",\"name\":\"A5044c9e7d95749a8ae7c68ca16238c9\",\"fields\":[{\"type\":\"string\",\"name\":\"id\",\"required\":false},{\"type\":\"string\",\"name\":\"value\",\"required\":false}]},\"required\":false},{\"type\":\"string\",\"name\":\"exampleTextField\",\"required\":false}]}"
+      },
+      "responseSchema": {
+        "name": "updateInventoryUsingPUT",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"updateInventoryUsingPUT\",\n   \"fields\": [\n      {\n         \"type\": \"record\",\n         \"name\": \"data\",\n         \"fields\": [],\n         \"required\": false\n      },\n      {\n         \"type\": \"array\",\n         \"name\": \"errors\",\n         \"items\": {\n            \"type\": \"record\",\n            \"name\": \"Aa4761045062f485e9ff3ff921a6c371\",\n            \"fields\": [\n               {\n                  \"type\": \"string\",\n                  \"name\": \"code\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"detail\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"record\",\n                  \"name\": \"source\",\n                  \"doc\": \"ErrorSource\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"parameter\",\n                        \"required\": false\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"pointer\",\n                        \"required\": false\n                     }\n                  ],\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"title\",\n                  \"required\": false\n               }\n            ]\n         },\n         \"required\": false\n      }\n   ]\n}"
+      }
+    }
+  ],
+  "directions": [
+    {
+      "startNode": "transform_0",
+      "endNode": "http_0"
+    },
+    {
+      "startNode": "http_0",
+      "endNode": "transform_condition_0"
+    },
+    {
+      "startNode": "transform_condition_0",
+      "endNode": "condition_0"
+    },
+    {
+      "startNode": "condition_0",
+      "endNode": "messagelog"
+    },
+    {
+      "startNode": "condition_0",
+      "endNode": "transform_2"
+    },
+    {
+      "startNode": "transform_2",
+      "endNode": "http_2"
+    },
+    {
+      "startNode": "condition_0",
+      "endNode": "transform_1"
+    },
+    {
+      "startNode": "transform_1",
+      "endNode": "http_1"
+    },
+    {
+      "startNode": "http_1",
+      "endNode": "dataTransformator_0"
+    },
+    {
+      "startNode": "dataTransformator_0",
+      "endNode": "transform_3"
+    },
+    {
+      "startNode": "transform_3",
+      "endNode": "http_3"
+    }
+  ],
+  "categoryBitValue": 17152,
+  "moduleBitValue": 52,
+  "seedSystem": false,
+  "halted": false,
+  "dlqEnabled": false
+}

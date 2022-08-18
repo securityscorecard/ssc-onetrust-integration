@@ -1,0 +1,505 @@
+{
+  "name": "SecurityScorecard Sync",
+  "enabled": false,
+  "workflowType": "COMPOSITE",
+  "integrationName": "SecurityScorecard Sync",
+  "referenceIntegrationName": "SecurityScorecard",
+  "dlqMessageCount": 0,
+  "throttlingLimit": 0,
+  "defaultDlqAction": "NONE",
+  "failedAlertFrequencyHrs": 0,
+  "formatVersion": "1.0",
+  "trigger": {
+    "name": "SecurityScorecard Sync",
+    "workflowName": "SecurityScorecard Sync",
+    "triggerType": "EVENT",
+    "triggerContext": {
+      "EventTrigger": {
+        "type": "EVENT",
+        "eventCode": "5502",
+        "condition": null,
+        "baseCondition": null,
+        "preCondition": null,
+        "webhook": false,
+        "subFlow": false,
+        "config": false
+      }
+    },
+    "description": null,
+    "eventCode": "5502",
+    "schema": null
+  },
+  "actions": [
+    {
+      "processType": "TRANSFORM",
+      "processContext": {
+        "DataTransformer": {
+          "type": "TRANSFORM",
+          "template": "{}",
+          "independentNode": false,
+          "continueOnError": null,
+          "isIndependentNode": false
+        }
+      },
+      "nodeLabel": "transform_0",
+      "nodeDescription": "GET Get Vendor",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": "getInventoryByIdUsingGET",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"getInventoryByIdUsingGET\",\n   \"fields\": [\n      {\n         \"type\": \"record\",\n         \"name\": \"data\",\n         \"fields\": [],\n         \"required\": false\n      },\n      {\n         \"type\": \"array\",\n         \"name\": \"errors\",\n         \"items\": {\n            \"type\": \"record\",\n            \"name\": \"A743a39358aaf45cabfc558af27240b0\",\n            \"fields\": [\n               {\n                  \"type\": \"string\",\n                  \"name\": \"code\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"detail\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"record\",\n                  \"name\": \"source\",\n                  \"doc\": \"ErrorSource\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"parameter\",\n                        \"required\": false\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"pointer\",\n                        \"required\": false\n                     }\n                  ],\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"title\",\n                  \"required\": false\n               }\n            ]\n         },\n         \"required\": false\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "HTTP",
+      "processContext": {
+        "HttpConnector": {
+          "type": "HTTP",
+          "headers": {},
+          "requestURI": "https://app.onetrust.com/api/inventory/v2/inventories/vendors/(id)",
+          "httpMethod": "GET",
+          "jweEncryptionRequired": false,
+          "jweDecryptionRequired": false,
+          "encryptionCredentialId": null,
+          "decryptionCredentialId": null,
+          "internal": true,
+          "continueOnError": "NONE",
+          "pathParams": {
+            "(id)": "${(event.payload.inventory.id)!}"
+          },
+          "queryParams": {},
+          "isInternal": true,
+          "isDSPortal": false,
+          "viewType": null
+        }
+      },
+      "nodeLabel": "http_0",
+      "nodeDescription": "GET Get Vendor",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": "getInventoryByIdUsingGET",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"getInventoryByIdUsingGET\",\n   \"fields\": [\n      {\n         \"type\": \"record\",\n         \"name\": \"data\",\n         \"fields\": [],\n         \"required\": false\n      },\n      {\n         \"type\": \"array\",\n         \"name\": \"errors\",\n         \"items\": {\n            \"type\": \"record\",\n            \"name\": \"A743a39358aaf45cabfc558af27240b0\",\n            \"fields\": [\n               {\n                  \"type\": \"string\",\n                  \"name\": \"code\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"detail\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"record\",\n                  \"name\": \"source\",\n                  \"doc\": \"ErrorSource\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"parameter\",\n                        \"required\": false\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"pointer\",\n                        \"required\": false\n                     }\n                  ],\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"title\",\n                  \"required\": false\n               }\n            ]\n         },\n         \"required\": false\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "TRANSFORM",
+      "processContext": {
+        "DataTransformer": {
+          "type": "TRANSFORM",
+          "template": "",
+          "independentNode": false,
+          "continueOnError": null,
+          "isIndependentNode": false
+        }
+      },
+      "nodeLabel": "transform_condition_0",
+      "nodeDescription": null,
+      "requestSchema": null,
+      "responseSchema": {
+        "name": null,
+        "description": null,
+        "schema": null
+      }
+    },
+    {
+      "processType": "CONDITION",
+      "processContext": {
+        "Condition": {
+          "type": "CONDITION",
+          "condition": {
+            "AndExpression": {
+              "type": "AND_EXPRESSION",
+              "expressions": [
+                {
+                  "AndExpression": {
+                    "type": "AND_EXPRESSION",
+                    "expressions": [
+                      {
+                        "BinaryExpression": {
+                          "type": "BINARY_EXPRESSION",
+                          "lookupField": "${(step.http_0.data.customField1000[0].value)!}",
+                          "operator": "EQUAL_TO",
+                          "value": "Yes",
+                          "name": null,
+                          "valueLoad": null
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "trueNodeLabel": "transform_4",
+          "falseNodeLabel": "transform_5",
+          "commonNodeLabel": "messagelog",
+          "conditionalStatus": null,
+          "continueOnError": null
+        }
+      },
+      "nodeLabel": "condition_0",
+      "nodeDescription": null,
+      "requestSchema": null,
+      "responseSchema": {
+        "name": null,
+        "description": null,
+        "schema": null
+      }
+    },
+    {
+      "processType": "TRANSFORM",
+      "processContext": {
+        "DataTransformer": {
+          "type": "TRANSFORM",
+          "template": "",
+          "independentNode": false,
+          "continueOnError": null,
+          "isIndependentNode": false
+        }
+      },
+      "nodeLabel": "transform_4",
+      "nodeDescription": "PUT Add company to portfolio",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": "Af5ad9aecd0df43abb92c56b4a3255df",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"Af5ad9aecd0df43abb92c56b4a3255df\",\n   \"fields\": [\n      {\n         \"name\": \"name\",\n         \"type\": \"string\",\n         \"default\": \"Example Co.\",\n         \"required\": false\n      },\n      {\n         \"name\": \"domain\",\n         \"type\": \"string\",\n         \"default\": \"example.com\",\n         \"required\": false\n      },\n      {\n         \"name\": \"grade\",\n         \"type\": \"string\",\n         \"default\": \"A\",\n         \"required\": false\n      },\n      {\n         \"name\": \"gradeurl\",\n         \"type\": \"string\",\n         \"original_name\": \"grade_url\",\n         \"required\": false\n      },\n      {\n         \"name\": \"score\",\n         \"type\": \"long\",\n         \"default\": 97,\n         \"required\": false\n      },\n      {\n         \"name\": \"industry\",\n         \"type\": \"string\",\n         \"default\": \"technology\",\n         \"required\": false\n      },\n      {\n         \"name\": \"size\",\n         \"type\": \"string\",\n         \"default\": \"size_501_to_1000\",\n         \"required\": false\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "HTTP",
+      "processContext": {
+        "HttpConnector": {
+          "type": "HTTP",
+          "headers": {},
+          "requestURI": "https://api.securityscorecard.io/portfolios/61706dad4f34e1001ab4dab9/companies/${(step.http_0.data.customField1005)!}",
+          "httpMethod": "PUT",
+          "jweEncryptionRequired": false,
+          "jweDecryptionRequired": false,
+          "encryptionCredentialId": null,
+          "decryptionCredentialId": null,
+          "internal": false,
+          "continueOnError": "NONE",
+          "pathParams": {},
+          "queryParams": {},
+          "isInternal": false,
+          "isDSPortal": false,
+          "viewType": null
+        }
+      },
+      "nodeLabel": "http_4",
+      "nodeDescription": "PUT Add company to portfolio",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": "Af5ad9aecd0df43abb92c56b4a3255df",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"Af5ad9aecd0df43abb92c56b4a3255df\",\n   \"fields\": [\n      {\n         \"name\": \"name\",\n         \"type\": \"string\",\n         \"default\": \"Example Co.\",\n         \"required\": false\n      },\n      {\n         \"name\": \"domain\",\n         \"type\": \"string\",\n         \"default\": \"example.com\",\n         \"required\": false\n      },\n      {\n         \"name\": \"grade\",\n         \"type\": \"string\",\n         \"default\": \"A\",\n         \"required\": false\n      },\n      {\n         \"name\": \"gradeurl\",\n         \"type\": \"string\",\n         \"original_name\": \"grade_url\",\n         \"required\": false\n      },\n      {\n         \"name\": \"score\",\n         \"type\": \"long\",\n         \"default\": 97,\n         \"required\": false\n      },\n      {\n         \"name\": \"industry\",\n         \"type\": \"string\",\n         \"default\": \"technology\",\n         \"required\": false\n      },\n      {\n         \"name\": \"size\",\n         \"type\": \"string\",\n         \"default\": \"size_501_to_1000\",\n         \"required\": false\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "TRANSFORM",
+      "processContext": {
+        "DataTransformer": {
+          "type": "TRANSFORM",
+          "template": "",
+          "independentNode": false,
+          "continueOnError": null,
+          "isIndependentNode": false
+        }
+      },
+      "nodeLabel": "transform_1",
+      "nodeDescription": "Get a company information and scorecard summary",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": "Get a company information and scorecard summary",
+        "description": null,
+        "schema": "{\n   \"format\": \"JSON\",\n   \"type\": \"record\",\n   \"fields\": [\n      {\n         \"type\": \"string\",\n         \"name\": \"name\",\n         \"default\": \"Amazon\"\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"domain\",\n         \"default\": \"amazon.com\"\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"gradeurl\",\n         \"original_name\": \"grade_url\",\n         \"default\": \"https://s3.amazonaws.com/ssc-static/grades/factor_b.svg\"\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"industry\",\n         \"default\": \"technology\"\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"size\",\n         \"default\": \"size_more_than_10000\"\n      },\n      {\n         \"type\": \"double\",\n         \"name\": \"score\",\n         \"default\": 80\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"grade\",\n         \"default\": \"B\"\n      },\n      {\n         \"type\": \"double\",\n         \"name\": \"last30dayscorechange\",\n         \"original_name\": \"last30day_score_change\",\n         \"default\": -3\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "HTTP",
+      "processContext": {
+        "HttpConnector": {
+          "type": "HTTP",
+          "headers": {},
+          "requestURI": "https://api.securityscorecard.io/companies/${(step.http_0.data.customField1005)!}",
+          "httpMethod": "GET",
+          "jweEncryptionRequired": false,
+          "jweDecryptionRequired": false,
+          "encryptionCredentialId": null,
+          "decryptionCredentialId": null,
+          "internal": false,
+          "continueOnError": "NONE",
+          "pathParams": {},
+          "queryParams": {},
+          "isInternal": false,
+          "isDSPortal": false,
+          "viewType": null
+        }
+      },
+      "nodeLabel": "http_1",
+      "nodeDescription": "Get a company information and scorecard summary",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": "Get a company information and scorecard summary",
+        "description": null,
+        "schema": "{\n   \"format\": \"JSON\",\n   \"type\": \"record\",\n   \"fields\": [\n      {\n         \"type\": \"string\",\n         \"name\": \"name\",\n         \"default\": \"Amazon\"\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"domain\",\n         \"default\": \"amazon.com\"\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"gradeurl\",\n         \"original_name\": \"grade_url\",\n         \"default\": \"https://s3.amazonaws.com/ssc-static/grades/factor_b.svg\"\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"industry\",\n         \"default\": \"technology\"\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"size\",\n         \"default\": \"size_more_than_10000\"\n      },\n      {\n         \"type\": \"double\",\n         \"name\": \"score\",\n         \"default\": 80\n      },\n      {\n         \"type\": \"string\",\n         \"name\": \"grade\",\n         \"default\": \"B\"\n      },\n      {\n         \"type\": \"double\",\n         \"name\": \"last30dayscorechange\",\n         \"original_name\": \"last30day_score_change\",\n         \"default\": -3\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "TRANSFORM",
+      "processContext": {
+        "DataTransformer": {
+          "type": "TRANSFORM",
+          "template": "{\n   \"customField1001\": \"${(step.http_1.grade)!}\",\n   \"customField1004\": \"${(step.http_1.industry)!}\",\n   \"customField1007\": \"${(step.http_1.last30day_score_change)!}\",\n   \"customField1006\": \"${(step.http_1.name)!}\",\n   \"customField1003\": \"${(step.http_1.score)!}\"\n}",
+          "independentNode": false,
+          "continueOnError": null,
+          "isIndependentNode": false
+        }
+      },
+      "nodeLabel": "transform_3",
+      "nodeDescription": "PUT Update Vendor",
+      "requestSchema": {
+        "name": "updateInventoryUsingPUT",
+        "description": "Inventory Update Request",
+        "schema": "{\"type\":\"record\",\"name\":\"updateInventoryUsingPUT\",\"doc\":\"Inventory Update Request\",\"fields\":[{\"type\":\"array\",\"name\":\"exampleSingleSelectField\",\"items\":{\"type\":\"record\",\"name\":\"A2b5c97b500e24e6e952bd01639262f7\",\"fields\":[{\"type\":\"string\",\"name\":\"id\",\"required\":false},{\"type\":\"string\",\"name\":\"value\",\"required\":false}]},\"required\":false},{\"type\":\"array\",\"name\":\"exampleMultiSelectField\",\"items\":{\"type\":\"record\",\"name\":\"A5044c9e7d95749a8ae7c68ca16238c9\",\"fields\":[{\"type\":\"string\",\"name\":\"id\",\"required\":false},{\"type\":\"string\",\"name\":\"value\",\"required\":false}]},\"required\":false},{\"type\":\"string\",\"name\":\"exampleTextField\",\"required\":false}]}"
+      },
+      "responseSchema": {
+        "name": "updateInventoryUsingPUT",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"updateInventoryUsingPUT\",\n   \"fields\": [\n      {\n         \"type\": \"record\",\n         \"name\": \"data\",\n         \"fields\": [],\n         \"required\": false\n      },\n      {\n         \"type\": \"array\",\n         \"name\": \"errors\",\n         \"items\": {\n            \"type\": \"record\",\n            \"name\": \"Aa4761045062f485e9ff3ff921a6c371\",\n            \"fields\": [\n               {\n                  \"type\": \"string\",\n                  \"name\": \"code\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"detail\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"record\",\n                  \"name\": \"source\",\n                  \"doc\": \"ErrorSource\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"parameter\",\n                        \"required\": false\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"pointer\",\n                        \"required\": false\n                     }\n                  ],\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"title\",\n                  \"required\": false\n               }\n            ]\n         },\n         \"required\": false\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "HTTP",
+      "processContext": {
+        "HttpConnector": {
+          "type": "HTTP",
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "requestURI": "https://app.onetrust.com/api/inventory/v2/inventories/vendors/(id)",
+          "httpMethod": "PUT",
+          "jweEncryptionRequired": false,
+          "jweDecryptionRequired": false,
+          "encryptionCredentialId": null,
+          "decryptionCredentialId": null,
+          "internal": true,
+          "continueOnError": "NONE",
+          "pathParams": {
+            "(id)": "${(event.payload.inventory.id)!}"
+          },
+          "queryParams": {},
+          "isInternal": true,
+          "isDSPortal": false,
+          "viewType": "ADVANCED"
+        }
+      },
+      "nodeLabel": "http_3",
+      "nodeDescription": "PUT Update Vendor",
+      "requestSchema": {
+        "name": "updateInventoryUsingPUT",
+        "description": "Inventory Update Request",
+        "schema": "{\"type\":\"record\",\"name\":\"updateInventoryUsingPUT\",\"doc\":\"Inventory Update Request\",\"fields\":[{\"type\":\"array\",\"name\":\"exampleSingleSelectField\",\"items\":{\"type\":\"record\",\"name\":\"A2b5c97b500e24e6e952bd01639262f7\",\"fields\":[{\"type\":\"string\",\"name\":\"id\",\"required\":false},{\"type\":\"string\",\"name\":\"value\",\"required\":false}]},\"required\":false},{\"type\":\"array\",\"name\":\"exampleMultiSelectField\",\"items\":{\"type\":\"record\",\"name\":\"A5044c9e7d95749a8ae7c68ca16238c9\",\"fields\":[{\"type\":\"string\",\"name\":\"id\",\"required\":false},{\"type\":\"string\",\"name\":\"value\",\"required\":false}]},\"required\":false},{\"type\":\"string\",\"name\":\"exampleTextField\",\"required\":false}]}"
+      },
+      "responseSchema": {
+        "name": "updateInventoryUsingPUT",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"updateInventoryUsingPUT\",\n   \"fields\": [\n      {\n         \"type\": \"record\",\n         \"name\": \"data\",\n         \"fields\": [],\n         \"required\": false\n      },\n      {\n         \"type\": \"array\",\n         \"name\": \"errors\",\n         \"items\": {\n            \"type\": \"record\",\n            \"name\": \"Aa4761045062f485e9ff3ff921a6c371\",\n            \"fields\": [\n               {\n                  \"type\": \"string\",\n                  \"name\": \"code\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"detail\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"record\",\n                  \"name\": \"source\",\n                  \"doc\": \"ErrorSource\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"parameter\",\n                        \"required\": false\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"pointer\",\n                        \"required\": false\n                     }\n                  ],\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"title\",\n                  \"required\": false\n               }\n            ]\n         },\n         \"required\": false\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "TRANSFORM",
+      "processContext": {
+        "DataTransformer": {
+          "type": "TRANSFORM",
+          "template": "",
+          "independentNode": false,
+          "continueOnError": null,
+          "isIndependentNode": false
+        }
+      },
+      "nodeLabel": "transform_5",
+      "nodeDescription": "DELETE Remove company from portfolio",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": null,
+        "description": null,
+        "schema": null
+      }
+    },
+    {
+      "processType": "HTTP",
+      "processContext": {
+        "HttpConnector": {
+          "type": "HTTP",
+          "headers": {},
+          "requestURI": "https://api.securityscorecard.io/portfolios/61706dad4f34e1001ab4dab9/companies/${(step.http_0.data.customField1005)!}",
+          "httpMethod": "DELETE",
+          "jweEncryptionRequired": false,
+          "jweDecryptionRequired": false,
+          "encryptionCredentialId": null,
+          "decryptionCredentialId": null,
+          "internal": false,
+          "continueOnError": "NONE",
+          "pathParams": {},
+          "queryParams": {},
+          "isInternal": false,
+          "isDSPortal": false,
+          "viewType": null
+        }
+      },
+      "nodeLabel": "http_5",
+      "nodeDescription": "DELETE Remove company from portfolio",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": null,
+        "description": null,
+        "schema": null
+      }
+    },
+    {
+      "processType": "TRANSFORM",
+      "processContext": {
+        "DataTransformer": {
+          "type": "TRANSFORM",
+          "template": "{\n   \"customField1001\": \"\",\n   \"customField1004\": \"\",\n   \"customField1007\": \"\",\n   \"customField1006\": \"\",\n   \"customField1003\": \"\"\n}",
+          "independentNode": false,
+          "continueOnError": null,
+          "isIndependentNode": false
+        }
+      },
+      "nodeLabel": "transform_2",
+      "nodeDescription": "PUT Update Vendor",
+      "requestSchema": {
+        "name": "updateInventoryUsingPUT",
+        "description": "Inventory Update Request",
+        "schema": "{\"type\":\"record\",\"name\":\"updateInventoryUsingPUT\",\"doc\":\"Inventory Update Request\",\"fields\":[{\"type\":\"array\",\"name\":\"exampleSingleSelectField\",\"items\":{\"type\":\"record\",\"name\":\"A5fce3ed88a654f68b6119673ef0823f\",\"fields\":[{\"type\":\"string\",\"name\":\"id\",\"required\":false},{\"type\":\"string\",\"name\":\"value\",\"required\":false}]},\"required\":false},{\"type\":\"array\",\"name\":\"exampleMultiSelectField\",\"items\":{\"type\":\"record\",\"name\":\"A43c7256898224e6ab2da1a2fe7df472\",\"fields\":[{\"type\":\"string\",\"name\":\"id\",\"required\":false},{\"type\":\"string\",\"name\":\"value\",\"required\":false}]},\"required\":false},{\"type\":\"string\",\"name\":\"exampleTextField\",\"required\":false}]}"
+      },
+      "responseSchema": {
+        "name": "updateInventoryUsingPUT",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"updateInventoryUsingPUT\",\n   \"fields\": [\n      {\n         \"type\": \"record\",\n         \"name\": \"data\",\n         \"fields\": [],\n         \"required\": false\n      },\n      {\n         \"type\": \"array\",\n         \"name\": \"errors\",\n         \"items\": {\n            \"type\": \"record\",\n            \"name\": \"A9aec51dfa2be4d8a999f3b720390c45\",\n            \"fields\": [\n               {\n                  \"type\": \"string\",\n                  \"name\": \"code\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"detail\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"record\",\n                  \"name\": \"source\",\n                  \"doc\": \"ErrorSource\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"parameter\",\n                        \"required\": false\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"pointer\",\n                        \"required\": false\n                     }\n                  ],\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"title\",\n                  \"required\": false\n               }\n            ]\n         },\n         \"required\": false\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "HTTP",
+      "processContext": {
+        "HttpConnector": {
+          "type": "HTTP",
+          "headers": {
+            "Content-Type": "application/json"
+          },
+          "requestURI": "https://app.onetrust.com/api/inventory/v2/inventories/vendors/(id)",
+          "httpMethod": "PUT",
+          "jweEncryptionRequired": false,
+          "jweDecryptionRequired": false,
+          "encryptionCredentialId": null,
+          "decryptionCredentialId": null,
+          "internal": true,
+          "continueOnError": "NONE",
+          "pathParams": {
+            "(id)": "${(event.payload.inventory.id)!}"
+          },
+          "queryParams": {},
+          "isInternal": true,
+          "isDSPortal": false,
+          "viewType": "ADVANCED"
+        }
+      },
+      "nodeLabel": "http_2",
+      "nodeDescription": "PUT Update Vendor",
+      "requestSchema": {
+        "name": "updateInventoryUsingPUT",
+        "description": "Inventory Update Request",
+        "schema": "{\"type\":\"record\",\"name\":\"updateInventoryUsingPUT\",\"doc\":\"Inventory Update Request\",\"fields\":[{\"type\":\"array\",\"name\":\"exampleSingleSelectField\",\"items\":{\"type\":\"record\",\"name\":\"A5fce3ed88a654f68b6119673ef0823f\",\"fields\":[{\"type\":\"string\",\"name\":\"id\",\"required\":false},{\"type\":\"string\",\"name\":\"value\",\"required\":false}]},\"required\":false},{\"type\":\"array\",\"name\":\"exampleMultiSelectField\",\"items\":{\"type\":\"record\",\"name\":\"A43c7256898224e6ab2da1a2fe7df472\",\"fields\":[{\"type\":\"string\",\"name\":\"id\",\"required\":false},{\"type\":\"string\",\"name\":\"value\",\"required\":false}]},\"required\":false},{\"type\":\"string\",\"name\":\"exampleTextField\",\"required\":false}]}"
+      },
+      "responseSchema": {
+        "name": "updateInventoryUsingPUT",
+        "description": null,
+        "schema": "{\n   \"type\": \"record\",\n   \"name\": \"updateInventoryUsingPUT\",\n   \"fields\": [\n      {\n         \"type\": \"record\",\n         \"name\": \"data\",\n         \"fields\": [],\n         \"required\": false\n      },\n      {\n         \"type\": \"array\",\n         \"name\": \"errors\",\n         \"items\": {\n            \"type\": \"record\",\n            \"name\": \"A9aec51dfa2be4d8a999f3b720390c45\",\n            \"fields\": [\n               {\n                  \"type\": \"string\",\n                  \"name\": \"code\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"detail\",\n                  \"required\": false\n               },\n               {\n                  \"type\": \"record\",\n                  \"name\": \"source\",\n                  \"doc\": \"ErrorSource\",\n                  \"fields\": [\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"parameter\",\n                        \"required\": false\n                     },\n                     {\n                        \"type\": \"string\",\n                        \"name\": \"pointer\",\n                        \"required\": false\n                     }\n                  ],\n                  \"required\": false\n               },\n               {\n                  \"type\": \"string\",\n                  \"name\": \"title\",\n                  \"required\": false\n               }\n            ]\n         },\n         \"required\": false\n      }\n   ]\n}"
+      }
+    },
+    {
+      "processType": "MESSAGELOG",
+      "processContext": {
+        "MessageLog": {
+          "type": "MESSAGELOG",
+          "continueOnError": null
+        }
+      },
+      "nodeLabel": "messagelog",
+      "nodeDescription": "Terminating Node : messagelog",
+      "requestSchema": null,
+      "responseSchema": {
+        "name": null,
+        "description": null,
+        "schema": null
+      }
+    }
+  ],
+  "directions": [
+    {
+      "startNode": "transform_0",
+      "endNode": "http_0"
+    },
+    {
+      "startNode": "http_0",
+      "endNode": "transform_condition_0"
+    },
+    {
+      "startNode": "transform_condition_0",
+      "endNode": "condition_0"
+    },
+    {
+      "startNode": "condition_0",
+      "endNode": "transform_4"
+    },
+    {
+      "startNode": "transform_4",
+      "endNode": "http_4"
+    },
+    {
+      "startNode": "http_4",
+      "endNode": "transform_1"
+    },
+    {
+      "startNode": "transform_1",
+      "endNode": "http_1"
+    },
+    {
+      "startNode": "http_1",
+      "endNode": "transform_3"
+    },
+    {
+      "startNode": "transform_3",
+      "endNode": "http_3"
+    },
+    {
+      "startNode": "condition_0",
+      "endNode": "transform_5"
+    },
+    {
+      "startNode": "transform_5",
+      "endNode": "http_5"
+    },
+    {
+      "startNode": "http_5",
+      "endNode": "transform_2"
+    },
+    {
+      "startNode": "transform_2",
+      "endNode": "http_2"
+    },
+    {
+      "startNode": "condition_0",
+      "endNode": "messagelog"
+    }
+  ],
+  "categoryBitValue": 17152,
+  "moduleBitValue": 52,
+  "seedSystem": false,
+  "halted": false,
+  "dlqEnabled": false
+}
